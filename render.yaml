@@ -1,0 +1,22 @@
+# render.yaml : Blueprint สำหรับ Render
+
+previews:
+  generation: automatic   # ให้ Render สร้าง Preview Environment อัตโนมัติเมื่อมี Pull Request
+
+services:
+  - type: web
+    name: smoke-monitor
+    env: node
+    buildCommand: npm install && npm run db:init
+    startCommand: npm start
+    plan: starter
+    autoDeploy: true   # เปิด Auto Deploy ทุกครั้งที่ push
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DB_PATH
+        value: /var/data/app.db
+      - key: API_KEY
+        sync: false   # จะใส่ API Key จริงผ่าน Dashboard ของ Render ภายหลัง
